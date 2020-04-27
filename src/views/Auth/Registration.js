@@ -1,154 +1,128 @@
-import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Icon from "@material-ui/core/Icon";
-// @material-ui/icons
-import Email from "@material-ui/icons/Email";
-import People from "@material-ui/icons/People";
-// core components
-import Header from "components/Header/Header.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import Button from "components/CustomButtons/Button.js";
-import Card from "components/Card/Card.js";
-import CardBody from "components/Card/CardBody.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardFooter from "components/Card/CardFooter.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
+import React, { Component } from 'react';
+import { Auth } from 'aws-amplify';
 
-import styles from "assets/jss/material-kit-react/views/loginPage.js";
-
-import image from "assets/img/bg7.jpg";
-
-const useStyles = makeStyles(styles);
-
-export default function RegistrationPage(props) {
-  const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  setTimeout(function() {
-    setCardAnimation("");
-  }, 700);
-  const classes = useStyles();
-  const { ...rest } = props;
-  return (
-    <div>
-      {/* <Header
-        absolute
-        color="transparent"
-        brand="Material Kit React"
-        rightLinks={<HeaderLinks />}
-        {...rest}
-      /> */}
-      <div
-        className={classes.pageHeader}
-        style={{
-          backgroundImage: "url(" + image + ")",
-          backgroundSize: "cover",
-          backgroundPosition: "top center"
-        }}
-      >
-        <div className={classes.container}>
-          <GridContainer justify="center">
-            <GridItem xs={12} sm={12} md={4}>
-              <Card className={classes[cardAnimaton]}>
-                <form className={classes.form}>
-                  <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4>Login</h4>
-                    <div className={classes.socialLine}>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-twitter"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-facebook"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-google-plus-g"} />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <p className={classes.divider}>Registrar Cuenta</p>
-                  <CardBody>
-                    <CustomInput
-                      labelText="Nombre Usuario"
-                      id="first"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "text",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <People className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <CustomInput
-                      labelText="Email..."
-                      id="email"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <CustomInput
-                      labelText="Contraseña"
-                      id="pass"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "password",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Icon className={classes.inputIconsColor}>
-                              lock_outline
-                            </Icon>
-                          </InputAdornment>
-                        ),
-                        autoComplete: "off"
-                      }}
-                    />
-                  </CardBody>
-                  <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg">
-                      ENTRAR
-                    </Button>
-                  </CardFooter>
-                </form>
-              </Card>
-            </GridItem>
-          </GridContainer>
-        </div>
-        {/* <Footer whiteFont /> */}
-      </div>
-    </div>
-  );
+class SignUpForm extends Component {
+    constructor(props) {
+        super(props);
+  
+        this.state = {
+            username: '',
+            password: '',
+            phone_number: '',
+            email: '',
+            confirmationCode: '',
+            verified: false
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.signUp = this.signUp.bind(this);
+        this.confirmSignUp = this.confirmSignUp.bind(this);
+    }
+  
+    signUp() {
+        const { username, password, email, phone_number } = this.state;  
+        Auth.signUp({
+            username: username,
+            email: email,
+            password: password,
+            attributes: {
+                email: email,
+                phone_number: phone_number
+            }
+        })
+        .then(() => {
+            console.log('Successfully signed up');
+        })
+        .catch((err) => console.log(`Error signing up: ${ err }`))
+    }
+  
+    confirmSignUp() {
+        const { username, confirmationCode } = this.state;
+        Auth.confirmSignUp(username, confirmationCode)
+        .then(() => {
+            console.log('Successfully confirmed signed up')
+            this.props.handleSignup();
+        })
+        .catch((err) => console.log(`Error confirming sign up - ${ err }`))
+    }
+  
+    handleSubmit(e) {
+      const { verified } = this.state;
+  
+        e.preventDefault();
+  
+        if (verified) {
+          this.confirmSignUp();
+          this.setState({
+             confirmationCode: '',
+             username: ''
+          });
+        } else {
+          this.signUp();
+          this.setState({
+            password: '',
+            email: '',
+            phone_number: '',
+            verified: true
+        });
+        }
+        e.target.reset();
+    }
+  
+    handleChange(e) {
+        if (e.target.id === 'username') {
+          this.setState({
+              username: e.target.value
+          });
+        } else if (e.target.id === 'password') {
+          this.setState({
+              password: e.target.value
+          });
+        } else if (e.target.id === 'phone_number') {
+          this.setState({
+              phone_number: e.target.value
+          });
+        } else if (e.target.id === 'email') {
+          this.setState({
+              email: e.target.value
+          });
+        } else if (e.target.id === 'confirmationCode') {
+          this.setState({
+              confirmationCode: e.target.value
+          });
+        }
+    }
+  
+    render() {
+      const { verified } = this.state;
+      if (verified) {
+          return (
+              <div>
+                  <form onSubmit={ this.handleSubmit }>
+                      <label>Confirmation Code</label>
+                      <input id='confirmationCode' type='text' onChange={ this.handleChange }/>
+                      <button>Confirm Sign up</button>
+                  </form>
+              </div>
+          );
+      } else {
+        return (
+          <div>
+            <form onSubmit={ this.handleSubmit }>
+                <label>Username</label>
+                <input id='username' type='text' onChange={ this.handleChange }/>
+                <label>Password</label>
+                <input id='password' type='password' onChange={ this.handleChange }/>
+                <label>Phone Number</label>
+                <input id='phone_number' type='text' onChange={ this.handleChange }/>
+                <label>Email</label>
+                <input id='email' type='text' onChange={ this.handleChange }/>
+                <button>Sign up</button>
+            </form>
+          </div>
+        );
+      }
+    }
 }
+
+export default SignUpForm;
