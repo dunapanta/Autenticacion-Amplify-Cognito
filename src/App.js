@@ -13,10 +13,11 @@ class App extends Component {
         this.state = {
             signedUp : false
         }
-        this.handleSignup = this.handleSignup.bind(this);
+        
     }
 
-    handleSignup() {
+    handleSignup = () => {
+        console.log("Cambio estado signedUp a: " , !this.state.signedUp);
         this.setState({
             signedUp: true
         });

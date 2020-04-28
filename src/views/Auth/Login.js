@@ -39,7 +39,7 @@ export default class Login extends Component {
     e.preventDefault();
     const {signedIn, password, email} = this.state
 
-      Auth.sigIn({
+      Auth.signIn({
         email: email,
         password: password,
         /* attributes: {
@@ -48,7 +48,10 @@ export default class Login extends Component {
         } */
 
       })
-      .then(() => console.log('Logeado'))
+      .then(() => {
+        console.log('Logeado');
+        this.setState({signedIn : true});
+      })
       .catch(err => console.log(err));
 
       Auth.confirmSignIn(email)
@@ -56,7 +59,7 @@ export default class Login extends Component {
       .catch(err => console.log(err));
 
       this.setState({
-        signIn: true
+        signedIn: true
       });
     
   }
@@ -70,114 +73,115 @@ export default class Login extends Component {
     const { ...rest } = this.props;
     const {signedUp} = this.state;
 
-    if (signedUp) {
-      return (
-        <div>
-          
-        <h1>Logeado</h1>
-        </div>
-      );
-    }else {
-        return (
-          <div>
+    const loggeado = (
+      <h1>Felicidades te has Logeado</h1>
+    );
+
+    const login = (
+      <div>
             
-            <div
-              
-              style={{
-                backgroundImage: "url(" + image + ")",
-                backgroundSize: "cover",
-                backgroundPosition: "top center"
-              }}
-            >
-              <div /* className={classes.container} */>
-                <GridContainer justify="center">
-                  <GridItem xs={12} sm={12} md={4}>
-                    <Card /* className={classes[cardAnimaton]} */>
-                      <form onSubmit={this.handleSubmit}/* className={classes.form} */>
-                        <CardHeader color="primary" >
-                          <h4>Registrarse</h4>
-                          <div /* className={classes.socialLine} */>
-                            <Button
-                              justIcon
-                              href="#pablo"
-                              target="_blank"
-                              color="transparent"
-                              onClick={e => e.preventDefault()}
-                            >
-                              <i className={"fab fa-twitter"} />
-                            </Button>
-                            <Button
-                              justIcon
-                              href="#pablo"
-                              target="_blank"
-                              color="transparent"
-                              onClick={e => e.preventDefault()}
-                            >
-                              <i className={"fab fa-facebook"} />
-                            </Button>
-                            <Button
-                              justIcon
-                              href="#pablo"
-                              target="_blank"
-                              color="transparent"
-                              onClick={e => e.preventDefault()}
-                            >
-                              <i className={"fab fa-google-plus-g"} />
-                            </Button>
-                          </div>
-                        </CardHeader>
-                        <p /* className= *//* classes.divider */>Registrar Cuenta</p>
-                        <CardBody>
-                          <CustomInput
-                            labelText="Email..."
-                            onChange={this.handleChange}
-                            id="email"
-                            formControlProps={{
-                              fullWidth: true
-                            }}
-                            inputProps={{
-                              type: "email",
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  <Email /* className=  classes.inputIconsColor *//>
-                                </InputAdornment>
-                              )
-                            }}
-                          />
-                          <CustomInput
-                            labelText="Contraseña"
-                            id="password"
-                            onChange={this.handleChange}
-                            formControlProps={{
-                              fullWidth: true
-                            }}
-                            inputProps={{
-                              type: "password",
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  <Icon /* className=  classes.inputIconsColor */>
-                                    lock_outline
-                                  </Icon>
-                                </InputAdornment>
-                              ),
-                              autoComplete: "off"
-                            }}
-                          />
-                        </CardBody>
-                        <CardFooter /* className= classes.cardFooter */>
-                          <Button simple color="primary" size="lg">
-                            INGRESAR
+      <div
+        
+        style={{
+          backgroundImage: "url(" + image + ")",
+          backgroundSize: "cover",
+          backgroundPosition: "top center"
+        }}
+      >
+        <div /* className={classes.container} */>
+              <GridContainer justify="center">
+                <GridItem xs={12} sm={12} md={4}>
+                  <Card /* className={classes[cardAnimaton]} */>
+                    <form /* className={classes.form} */>
+                      <CardHeader color="primary" >
+                        <h4>Logearse</h4>
+                        <div /* className={classes.socialLine} */>
+                          <Button
+                            justIcon
+                            href="#pablo"
+                            target="_blank"
+                            color="transparent"
+                            onClick={e => e.preventDefault()}
+                          >
+                            <i className={"fab fa-twitter"} />
                           </Button>
-                        </CardFooter>
-                      </form>
-                    </Card>
-                  </GridItem>
-                </GridContainer>
-              </div>
-              {/* <Footer whiteFont /> */}
+                          <Button
+                            justIcon
+                            href="#pablo"
+                            target="_blank"
+                            color="transparent"
+                            onClick={e => e.preventDefault()}
+                          >
+                            <i className={"fab fa-facebook"} />
+                          </Button>
+                          <Button
+                            justIcon
+                            href="#pablo"
+                            target="_blank"
+                            color="transparent"
+                            onClick={e => e.preventDefault()}
+                          >
+                            <i className={"fab fa-google-plus-g"} />
+                          </Button>
+                        </div>
+                      </CardHeader>
+                      <p /* className= *//* classes.divider */>Acceder Cuenta</p>
+                      <CardBody>
+                        <CustomInput
+                          labelText="Email..."
+                          onChange={this.handleChange}
+                          id="email"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            type: "email",
+                            onChange:this.handleChange,
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Email /* className=  classes.inputIconsColor *//>
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                        <CustomInput
+                          labelText="Contraseña"
+                          id="password"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            type: "password",
+                            onChange: this.handleChange,
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Icon /* className=  classes.inputIconsColor */>
+                                  lock_outline
+                                </Icon>
+                              </InputAdornment>
+                            ),
+                            autoComplete: "off"
+                          }}
+                        />
+                      </CardBody>
+                      <CardFooter /* className= classes.cardFooter */>
+                        <Button simple color="primary" size="lg" onClick={this.handleSubmit}>
+                          INGRESAR
+                        </Button>
+                      </CardFooter>
+                    </form>
+                  </Card>
+                </GridItem>
+              </GridContainer>
             </div>
+            {/* <Footer whiteFont /> */}
           </div>
+        </div>
+    );
+    
+        return (
+          this.state.signedIn ? loggeado : login
         );
-      }  
+        
   }
 }
