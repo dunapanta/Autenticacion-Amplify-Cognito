@@ -1,11 +1,17 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import RegistrationPage from './views/Auth/Registration';
+//Amplify
+import Amplify from 'aws-amplify';
+import aws_exports from './aws-exports';
+//Vistas
+import Authentication from './views/Auth/Authentication';
+
+Amplify.configure(aws_exports);
 
 function App() {
   return (
-    <RegistrationPage />
+    <Authentication />
   );
 }
 

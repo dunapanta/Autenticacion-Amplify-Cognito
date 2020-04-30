@@ -22,16 +22,43 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg7.jpg";
+import { PhoneAndroid } from "@material-ui/icons";
+//Amplify integracion Cognito
+import { Auth } from "aws-amplify";
+
 
 const useStyles = makeStyles(styles);
 
-export default function RegistrationPage(props) {
+export default function RegistrationPage({inputs, switchPage, handleFormInput}) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
+
+ 
   const classes = useStyles();
-  const { ...rest } = props;
+  //const { ...rest } = props;
+
+  const handleSignUp = e => {
+    e.preventDefault();
+    const { username, email, password, phone_number} = inputs;
+    Auth.signUp({
+      email,
+      password,
+      username,
+      attributes:{
+        phone_number
+      }
+    })
+    .then(data => {
+      console.log("Registrado");
+      console.log(data);
+    })
+    .then(() => switchPage("Verify")) // Cambia a componente Verify
+    .catch( err => console.log("Houston problemas: ", err))
+  }
+
   return (
     <div>
       {/* <Header
@@ -55,7 +82,7 @@ export default function RegistrationPage(props) {
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
                   <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4>Login</h4>
+                    <h4>Registrarse</h4>
                     <div className={classes.socialLine}>
                       <Button
                         justIcon
@@ -86,16 +113,18 @@ export default function RegistrationPage(props) {
                       </Button>
                     </div>
                   </CardHeader>
-                  <p className={classes.divider}>Registrar Cuenta</p>
+                  <strong><p className={classes.divider}>Registrar Cuenta</p></strong>
                   <CardBody>
                     <CustomInput
                       labelText="Nombre Usuario"
-                      id="first"
+                      id="username"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         type: "text",
+                        onChange: handleFormInput,
+                        value: inputs.username,
                         endAdornment: (
                           <InputAdornment position="end">
                             <People className={classes.inputIconsColor} />
@@ -104,13 +133,15 @@ export default function RegistrationPage(props) {
                       }}
                     />
                     <CustomInput
-                      labelText="Email..."
+                      labelText="Email"
                       id="email"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         type: "email",
+                        value: inputs.email,
+                        onChange: handleFormInput,
                         endAdornment: (
                           <InputAdornment position="end">
                             <Email className={classes.inputIconsColor} />
@@ -120,12 +151,13 @@ export default function RegistrationPage(props) {
                     />
                     <CustomInput
                       labelText="Contraseña"
-                      id="pass"
+                      id="password"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         type: "password",
+                        onChange: handleFormInput,
                         endAdornment: (
                           <InputAdornment position="end">
                             <Icon className={classes.inputIconsColor}>
@@ -136,10 +168,28 @@ export default function RegistrationPage(props) {
                         autoComplete: "off"
                       }}
                     />
+
+                    <CustomInput
+                      labelText="Telefono..."
+                      id="phone_number"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        type: "text",
+                        onChange: handleFormInput,
+                        value: inputs.phone_number,
+                        endAdornment: (
+                           <InputAdornment position="end">
+                            <PhoneAndroid className={classes.inputIconsColor} />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg">
-                      ENTRAR
+                    <Button simple color="primary" size="lg" onClick={handleSignUp}>
+                      REGISTRARSE
                     </Button>
                   </CardFooter>
                 </form>
