@@ -25,12 +25,16 @@ import image from "assets/img/bg7.jpg";
 import { PhoneAndroid } from "@material-ui/icons";
 //Amplify integracion Cognito
 import { Auth } from "aws-amplify";
+//Routing
+import { useHistory } from "react-router-dom";
 
 
-const useStyles = makeStyles(styles);
+
 
 export default function RegistrationPage({inputs, switchPage, handleFormInput}) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+  const useStyles = makeStyles(styles);
+  const history = useHistory();
 
   setTimeout(function() {
     setCardAnimation("");
@@ -54,8 +58,8 @@ export default function RegistrationPage({inputs, switchPage, handleFormInput}) 
     .then(data => {
       console.log("Registrado");
       console.log(data);
+      history.push("/verify") //cambia a componente verify
     })
-    .then(() => switchPage("Verify")) // Cambia a componente Verify
     .catch( err => console.log("Houston problemas: ", err))
   }
 

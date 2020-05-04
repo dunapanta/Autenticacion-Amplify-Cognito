@@ -3,6 +3,8 @@ import React from 'react';
 import RegistrationPage from 'views/Auth/AuthPages/Registration';
 import LoginPage from 'views/Auth/AuthPages/Login';
 import Verify from 'views/Auth/AuthPages/VerificationCode';
+import Home from 'views/Home/Home';
+import { Switch, Route, Router, Link} from 'react-router-dom';
 
 
  const Authentication = () => {
@@ -31,7 +33,7 @@ import Verify from 'views/Auth/AuthPages/VerificationCode';
     }
 
     
-        switch (page){
+        /* switch (page){
             case "SignUp":
                 return(
                     <RegistrationPage
@@ -58,7 +60,7 @@ import Verify from 'views/Auth/AuthPages/VerificationCode';
                 );
             case "Welcome":
                 return(
-                    <h1>Felicidades Has Iniciado Sesión</h1>
+                    <Home />
                 );
             default:
                 return(
@@ -68,7 +70,49 @@ import Verify from 'views/Auth/AuthPages/VerificationCode';
                         switchPage={handlePage}
                     />
                 );
-        }
-}
+        } */
+
+        return(
+            <div>
+               <Switch>
+               <Route path="/login">
+                    <LoginPage
+                        inputs={usuario} 
+                        handleFormInput={handleFormInput}
+                        switchPage={handlePage}  
+                    />
+               </Route>
+               <Route path="/register">
+                    <RegistrationPage
+                        inputs={usuario}
+                        handleFormInput={handleFormInput}
+                        switchPage={handlePage}  
+                    />
+               </Route>
+               <Route path="/verify">
+                     <Verify 
+                        inputs={usuario}
+                        handleFormInput={handleFormInput}
+                        switchPage={handlePage}  
+                    />
+                    />
+               </Route>
+               <Route path="/home">
+                      <h1>Pin Pan Pun Logeado</h1>
+               </Route>
+               <Route path="/">
+                    <RegistrationPage
+                        inputs={usuario}
+                        handleFormInput={handleFormInput}
+                        switchPage={handlePage}  
+                    />
+               </Route>
+               </Switch>
+                
+            </div>
+        );
+
+       
+    }
 
 export default Authentication;

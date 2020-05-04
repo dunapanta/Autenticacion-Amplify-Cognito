@@ -26,11 +26,17 @@ import { VpnKey } from "@material-ui/icons";
 //Amplify integracion Cognito
 import { Auth } from "aws-amplify";
 
+//Routing
+import { useHistory } from "react-router-dom";
+
 
 const useStyles = makeStyles(styles);
 
 export default function Verify({ inputs, switchPage, handleFormInput}) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+  const useStyles = makeStyles(styles);
+  const history = useHistory();
+
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
@@ -45,8 +51,8 @@ export default function Verify({ inputs, switchPage, handleFormInput}) {
     .then( data => { 
         console.log("Confirmacion Exitosa");
         console.log(data);
+        history.push("/login")
     })
-    .then(() => switchPage("SignIn"))
     .catch( err => console.log("Houston problemas: ", err))
   }
 
