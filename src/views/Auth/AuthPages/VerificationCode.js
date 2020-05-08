@@ -32,7 +32,7 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
-export default function Verify({ inputs, switchPage, handleFormInput}) {
+export default function Verify({ inputs, handleFormInput}) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   const useStyles = makeStyles(styles);
   const history = useHistory();
@@ -58,13 +58,13 @@ export default function Verify({ inputs, switchPage, handleFormInput}) {
 
   return (
     <div>
-      {/* <Header
+      <Header
         absolute
         color="transparent"
         brand="Material Kit React"
         rightLinks={<HeaderLinks />}
-        {...rest}
-      /> */}
+        //{...rest}
+      />
       <div
         className={classes.pageHeader}
         style={{

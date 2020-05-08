@@ -29,11 +29,11 @@ import { Auth } from "aws-amplify";
 import { useHistory } from "react-router-dom";
 
 
+const useStyles = makeStyles(styles);
 
-
-export default function RegistrationPage({inputs, switchPage, handleFormInput}) {
+export default function RegistrationPage(props) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  const useStyles = makeStyles(styles);
+  const {inputs, handleFormInput} = props;
   const history = useHistory();
 
   setTimeout(function() {
@@ -42,7 +42,7 @@ export default function RegistrationPage({inputs, switchPage, handleFormInput}) 
 
  
   const classes = useStyles();
-  //const { ...rest } = props;
+  const { ...rest } = props;
 
   const handleSignUp = e => {
     e.preventDefault();
@@ -65,13 +65,13 @@ export default function RegistrationPage({inputs, switchPage, handleFormInput}) 
 
   return (
     <div>
-      {/* <Header
+      <Header
         absolute
         color="transparent"
         brand="Material Kit React"
         rightLinks={<HeaderLinks />}
         {...rest}
-      /> */}
+      />
       <div
         className={classes.pageHeader}
         style={{

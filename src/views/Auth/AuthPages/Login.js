@@ -29,7 +29,7 @@ import { useHistory } from "react-router-dom";
 
 
 
-export default function LoginPage({ inputs, switchPage, handleFormInput}) {
+export default function LoginPage({ inputs, handleFormInput}) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   const useStyles = makeStyles(styles);
   const history = useHistory();
@@ -38,6 +38,7 @@ export default function LoginPage({ inputs, switchPage, handleFormInput}) {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
+  //const { ...rest } = props;
   
   const handleSignIn = event => {
     event.preventDefault();
@@ -53,13 +54,13 @@ export default function LoginPage({ inputs, switchPage, handleFormInput}) {
   }
   return (
     <div>
-      {/* <Header
+      <Header
         absolute
         color="transparent"
         brand="Material Kit React"
         rightLinks={<HeaderLinks />}
-        {...rest}
-      /> */}
+        //{...rest}
+      />
       <div
         className={classes.pageHeader}
         style={{
